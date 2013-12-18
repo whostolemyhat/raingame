@@ -2,14 +2,9 @@ package com.whostolemyhat.rain;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
-/**
- * Created with IntelliJ IDEA.
- * User: James
- * Date: 05/12/13
- * Time: 18:50
- * To change this template use File | Settings | File Templates.
- */
+
 public class Game extends Canvas implements Runnable {
     public static int width = 300;
     public static int height = width / 16 * 9;
@@ -55,7 +50,26 @@ public class Game extends Canvas implements Runnable {
     @Override
     public void run() {
         while (running) {
-            System.out.println("Running");
+            // limit update to 60fps
+            update();
+            // don't limit render
+            render();
         }
+    }
+
+    public void update() {}
+
+    public void render() {
+        BufferStrategy bs = getBufferStrategy();
+        if(bs == null) {
+            createBufferStrategy(3);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.dispose();
+        bs.show();
     }
 }
